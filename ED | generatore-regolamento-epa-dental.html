@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generatore Regolamento Aziendale per Studio Odontoiatrico | EPA Dental</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- RESET & BASE --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Lato', sans-serif;
+            color: #181717;
+            background-color: #ffffff;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; color: #0b1323; }
+        h1 { font-size: 2.2rem; margin-bottom: 1rem; }
+        h2 { font-size: 1.5rem; margin-bottom: 1rem; text-transform: uppercase; color: #cfaa5c; font-family: 'Lato', sans-serif; font-weight: 700; letter-spacing: 1px; }
+        h3 { font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: 0.5rem; }
+        p { margin-bottom: 1rem; }
+
+        /* --- LAYOUT --- */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem;
+            flex: 1;
+        }
+        .screen { display: none; }
+        .screen.active { display: block; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- HOME --- */
+        .home-intro { text-align: center; max-width: 700px; margin: 2rem auto; }
+        .home-intro p { font-size: 1.1rem; color: #181717; margin-bottom: 1.5rem; }
+
+        /* --- RESUME BANNER --- */
+        .resume-banner {
+            background-color: #fdf6e3;
+            border-left: 4px solid #cfaa5c;
+            padding: 1.2rem;
+            border-radius: 0 4px 4px 0;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+        .resume-banner p { margin-bottom: 0.9rem; }
+        .backup-row { text-align: center; margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #eee; }
+        .backup-row p { font-size: 0.9rem; color: #666; margin-bottom: 0.8rem; }
+
+        /* --- PROGRESS BAR --- */
+        .progress-container {
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            height: 8px;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #cfaa5c;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .step-indicator {
+            text-align: right;
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        /* --- FORM ELEMENTS --- */
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #0b1323;
+        }
+        .form-group label .required { color: #cfaa5c; }
+        .form-group .help-text { font-weight: 400; font-size: 0.85rem; color: #666; margin-top: 0.3rem; }
+        .form-group .warning-text { font-weight: 400; font-size: 0.85rem; color: #a15c00; margin-top: 0.4rem; background: #fff6e5; padding: 0.5rem 0.7rem; border-radius: 4px; }
+        input[type="text"], input[type="date"], input[type="number"], textarea, select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: 'Lato', sans-serif;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus, input[type="date"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
+            border-color: #cfaa5c;
+            outline: none;
+        }
+        textarea { resize: vertical; min-height: 80px; }
+
+        .radio-group, .checkbox-group { display: flex; flex-direction: column; gap: 0.5rem; }
+        .radio-group label, .checkbox-group label {
+            font-weight: 400;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            cursor: pointer;
+        }
+        .radio-group input, .checkbox-group input { margin-top: 0.3rem; }
+        .conditional-block {
+            display: none;
+            background-color: #f9f9f9;
+            padding: 1.5rem;
+            border-left: 3px solid #cfaa5c;
+            margin-top: 1rem;
+            border-radius: 0 4px 4px 0;
+        }
+        .conditional-block.visible { display: block; }
+
+        /* --- BUTTONS --- */
+        .btn {
+            display: inline-block;
+            padding: 0.9rem 2rem;
+            border: none;
+            border-radius: 4px;
+            font-family: 'Lato', sans-serif;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .btn-primary { background-color: #0b1323; color: #ffffff; }
+        .btn-primary:hover { background-color: #1a253a; }
+        .btn-secondary { background-color: #f0f0f0; color: #0b1323; margin-right: 1rem; }
+        .btn-secondary:hover { background-color: #e0e0e0; }
+        .btn-accent { background-color: #cfaa5c; color: #0b1323; }
+        .btn-accent:hover { background-color: #b8954a; }
+        .btn-small { padding: 0.5rem 1.1rem; font-size: 0.8rem; }
+        .btn:active { transform: scale(0.98); }
+        .nav-buttons { display: flex; justify-content: space-between; align-items: center; margin-top: 2rem; flex-wrap: wrap; gap: 0.8rem; }
+        .nav-buttons-left { display: flex; align-items: center; gap: 0.8rem; }
+        .save-row { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem; }
+        .save-toast { font-size: 0.85rem; color: #2e7d32; font-weight: 700; opacity: 0; transition: opacity 0.3s; }
+        .save-toast.visible { opacity: 1; }
+
+        /* --- PREVIEW --- */
+        .preview-container {
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            padding: 3rem;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        .preview-container h2 { border-bottom: 2px solid #cfaa5c; padding-bottom: 0.5rem; margin-top: 2rem; }
+        .preview-container h3 { color: #0b1323; font-family: 'Playfair Display', serif; font-size: 1.1rem; }
+        .preview-container ul { margin-left: 1.5rem; margin-bottom: 1rem; }
+        .preview-container .disclaimer {
+            background-color: #fdf6e3;
+            border-left: 4px solid #cfaa5c;
+            padding: 1rem;
+            font-style: italic;
+            margin-bottom: 2rem;
+        }
+        .export-actions { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: #0b1323;
+            color: #ffffff;
+            text-align: center;
+            padding: 2rem 1.5rem;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            margin-top: auto;
+        }
+        footer p { margin-bottom: 0.5rem; color: #ccc; }
+        footer strong { color: #cfaa5c; }
+
+        /* --- UTILS --- */
+        .error-msg { color: #d32f2f; font-size: 0.85rem; margin-top: 0.3rem; display: none; }
+        .form-group.invalid input, .form-group.invalid textarea, .form-group.invalid select { border-color: #d32f2f; }
+        .form-group.invalid .error-msg { display: block; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- HOME SCREEN -->
+        <div id="home-screen" class="screen active">
+            <div class="home-intro">
+                <h1>Crea il regolamento aziendale del tuo studio odontoiatrico</h1>
+                <h2>Uno strumento pratico per chiarire ruoli, regole, responsabilità e procedure interne</h2>
+                <p>Un regolamento aziendale per studio odontoiatrico è un documento interno che chiarisce regole organizzative, responsabilità, comportamenti attesi, procedure operative e criteri di collaborazione tra titolare, personale clinico, segreteria, collaboratori e consulenti.</p>
+                <p>Serve a ridurre ambiguità, proteggere lo studio, migliorare la qualità del servizio, prevenire errori organizzativi e rendere più chiaro il funzionamento quotidiano dello studio.</p>
+                <p>Compila il questionario guidato. Le tue risposte verranno trasformate in una bozza articolata e personalizzata, pronta da scaricare in Word e far verificare al tuo consulente del lavoro.</p>
+            </div>
+
+            <div id="resume-banner" class="resume-banner" style="display:none;">
+                <p><strong>Abbiamo trovato una bozza salvata in questo browser.</strong> Vuoi riprenderla da dove l'avevi lasciata o iniziare da capo?</p>
+                <button class="btn btn-accent" onclick="resumeDraft()">Riprendi bozza</button>
+                <button class="btn btn-secondary" onclick="discardDraft()">Inizia da zero</button>
+            </div>
+
+            <div style="text-align:center;">
+                <button class="btn btn-primary" onclick="startWizard()">INIZIA IL QUESTIONARIO</button>
+            </div>
+
+            <div class="backup-row">
+                <p>Hai già una bozza salvata come file? Puoi caricarla qui per continuare da un altro dispositivo.</p>
+                <button class="btn btn-secondary btn-small" onclick="document.getElementById('import-file-input').click()">Carica bozza da file (.json)</button>
+                <input type="file" id="import-file-input" accept=".json" style="display:none" onchange="importDraft(event)">
+            </div>
+        </div>
+
+        <!-- WIZARD SCREEN -->
+        <div id="wizard-screen" class="screen">
+            <div class="step-indicator">Passo <span id="current-step-num">1</span> di <span id="total-steps-num">21</span></div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="save-row">
+                <button class="btn btn-secondary btn-small" onclick="manualSave()">Salva bozza</button>
+                <button class="btn btn-secondary btn-small" onclick="exportDraft()">Esporta backup (.json)</button>
+                <span class="save-toast" id="save-toast">Bozza salvata ✓</span>
+            </div>
+            <div id="wizard-form-container"></div>
+            <div class="nav-buttons">
+                <div class="nav-buttons-left">
+                    <button class="btn btn-secondary" id="btn-back" onclick="prevStep()">Indietro</button>
+                </div>
+                <button class="btn btn-primary" id="btn-next" onclick="nextStep()">Avanti</button>
+            </div>
+        </div>
+
+        <!-- PREVIEW SCREEN -->
+        <div id="preview-screen" class="screen">
+            <h1>Anteprima del Regolamento</h1>
+            <p>Verifica il documento generato. Scaricalo in Word per inviarlo al consulente del lavoro: il file mantiene titoli, sottotitoli e paragrafi correttamente formattati.</p>
+            <div class="export-actions">
+                <button class="btn btn-accent" onclick="scaricaWord()">Scarica in Word (.doc)</button>
+                <button class="btn btn-secondary" onclick="copyToClipboard()">Copia tutto</button>
+                <button class="btn btn-secondary" onclick="restartWizard()">Ricomincia</button>
+            </div>
+            <div id="preview-content" class="preview-container"></div>
+            <div class="nav-buttons">
+                <button class="btn btn-secondary" onclick="showScreen('wizard-screen')">Torna al questionario</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p><strong>EPA Dental</strong> è un'iniziativa specialistica dell'EPA Partnership Program.</p>
+        <p>Servizi e attività erogati da Annalisa Corti in qualità di Trustee del Charitable Corti Trust.</p>
+        <p>All Rights Reserved. Copyright © 2026 Charitable Corti Trust</p>
+        <p>82A James Carter Road, Mildenhall, Suffolk IP28 7DE</p>
+        <p>CF 92078130520 (Codice ATECO 99.00.00 – Organizzazioni ed organismi extraterritoriali).</p>
+    </footer>
+
+    <script>
+        // --- 1. SCHEMA DEFINITION ---
+        const SCHEMA = [
+            {
+                id: "dati_studio",
+                title: "Dati dello Studio",
+                fields: [
+                    { id: "nome_studio", label: "Nome commerciale dello Studio", type: "text", required: true },
+                    { id: "ragione_sociale", label: "Ragione Sociale", type: "text", required: true },
+                    { id: "p_iva", label: "Partita IVA", type: "text", required: true },
+                    { id: "sede_legale", label: "Sede Legale", type: "text", required: true },
+                    { id: "sede_operativa", label: "Sede Operativa (se diversa)", type: "text", required: false },
+                    { id: "nome_titolare", label: "Nome e Cognome del Titolare/Legale Rappresentante", type: "text", required: true },
+                    { id: "direttore_sanitario", label: "Direttore Sanitario (se diverso dal titolare)", type: "text", required: false },
+                    { id: "ccnl", label: "CCNL Applicato", type: "select", required: true, options: ["Confcommercio", "Confapi", "Studi Professionali (Confprofessioni)", "CCNL Sanitario", "Altro (specificare nel documento)"] },
+                    { id: "data_entrata_vigore", label: "Data di entrata in vigore del regolamento", type: "date", required: true }
+                ]
+            },
+            {
+                id: "struttura_organizzativa",
+                title: "Struttura Organizzativa",
+                fields: [
+                    { id: "presenza_aso_cso", label: "Sono presenti ASO/CSO?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "presenza_segreteria", label: "È presente personale di segreteria?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "presenza_odontoiatri_collab", label: "Sono presenti odontoiatri collaboratori?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "presenza_igienisti", label: "Sono presenti igienisti dentali?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "presenza_consulenti_esterni", label: "Sono presenti consulenti esterni (es. commercialista, consulente del lavoro)?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "esistono_mansionari", label: "Esistono mansionari scritti?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "esistono_protocolli", label: "Esistono protocolli operativi scritti?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "esistono_checklist", label: "Esistono checklist di controllo?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "chi_assegna_mansioni", label: "Chi assegna le mansioni quotidiane?", type: "text", required: true },
+                    { id: "a_chi_chiedere_istruzioni", label: "A chi si chiedono istruzioni in caso di dubbio?", type: "text", required: true },
+                    { id: "divisa_obbligatoria", label: "È prevista una divisa/abbigliamento da lavoro obbligatorio?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "cartellino_riconoscimento", label: "È previsto un cartellino di riconoscimento per il personale?", type: "radio", required: true, options: ["si", "no"] }
+                ]
+            },
+            {
+                id: "principi_organizzativi",
+                title: "Principi Organizzativi e Standard Clinici",
+                fields: [
+                    { id: "valori_fondamentali", label: "Valori fondamentali dello studio (es. empatia, precisione, trasparenza)", type: "textarea", required: true },
+                    { id: "standard_qualita", label: "Standard di qualità clinica e organizzativa adottati", type: "textarea", required: true },
+                    { id: "comportamenti_pazienti", label: "Comportamenti attesi verso i pazienti", type: "textarea", required: true },
+                    { id: "comportamenti_colleghi", label: "Comportamenti attesi verso i colleghi", type: "textarea", required: true },
+                    { id: "comportamenti_non_accettabili", label: "Comportamenti non accettabili (es. maleducazione, puntualità scarsa)", type: "textarea", required: true },
+                    { id: "miglioramento_continuo", label: "È previsto un percorso di miglioramento continuo?", type: "radio", required: true, options: ["si", "no"] }
+                ]
+            },
+            {
+                id: "ruoli_responsabilita",
+                title: "Ruoli e Responsabilità",
+                fields: [
+                    // Conditional ASO
+                    { id: "aso_supporto_clinico", label: "[ASO] Supportano l'attività clinica?", type: "radio", required: true, options: ["si", "no"], showIf: { field: "presenza_aso_cso", equals: "si" } },
+                    { id: "aso_preparazione_sale", label: "[ASO] Gestiscono preparazione sale?", type: "radio", required: true, options: ["si", "no"], showIf: { field: "presenza_aso_cso", equals: "si" } },
+                    { id: "aso_sterilizzazione", label: "[ASO] Gestiscono sterilizzazione?", type: "radio", required: true, options: ["si", "no"], showIf: { field: "presenza_aso_cso", equals: "si" } },
+                    { id: "aso_sanificazione", label: "[ASO] Gestiscono sanificazione?", type: "radio", required: true, options: ["si", "no"], showIf: { field: "presenza_aso_cso", equals: "si" } },
+                    { id: "aso_magazzino", label: "[ASO] Gestiscono magazzino clinico?", type: "radio", required: true, options: ["si", "no"], showIf: { field: "presenza_aso_cso", equals: "si" } },
+                    { id: "aso_segnalazione_materiali", label: "[ASO] Segnalano materiali in esaurimento?", type: "radio", required: true, options: ["si", "no"], showIf: { field: "presenza_aso_cso", equals: "si" } },
+                    { id: "aso_documentazione", label: "[ASO] Supportano documentazione clinica?", type: "radio", required: true, options: ["si", "no"], showIf: { field: "presenza_aso_cso", equals: "si" } },
+                    { id: "aso_scansioni_foto", label: "[ASO] Gestiscono scansioni, impronte, foto o prescrizioni?", type: "radio", required: true, options: ["si", "no"], showIf: { field: "presenza_aso_cso", equals: "si" } },
+                    // Conditional Segreteria
+                    { id: "segreteria_agenda", label: "[Segreteria] Gestisce agenda?", type: "radio", required: true, options: ["si", "no"], showIf: { field: "presenza_segreteria", equals: "si" } },
+                    { id: "segreteria_richiami", label: "[Segreteria] Gestisce richiami?", type: "radio", required: true, options: ["si", "no"], showIf: { field: "presenza_segreteria", equals: "si" } },
+                    { id: "segreteria_preventivi", label: "[Segreteria] Gestisce preventivi?", type: "radio", required: true, options: ["si", "no"], showIf: { field: "presenza_segreteria", equals: "si" } },
+                    { id: "segreteria_pagamenti", label: "[Segreteria] Gestisce pagamenti?", type: "radio", required: true, options: ["si", "no"], showIf: { field: "presenza_segreteria", equals: "si" } },
+                    { id: "segreteria_rapporto_pazienti", label: "[Segreteria] Gestisce rapporto con pazienti?", type: "radio", required: true, options: ["si", "no"], showIf: { field: "presenza_segreteria", equals: "si" } },
+                    { id: "segreteria_ordini", label: "[Segreteria] Gestisce ordini?", type: "radio", required: true, options: ["si", "no"], showIf: { field: "presenza_segreteria", equals: "si" } },
+                    { id: "segreteria_laboratorio", label: "[Segreteria] Gestisce rapporti con laboratorio?", type: "radio", required: true, options: ["si", "no"], showIf: { field: "presenza_segreteria", equals: "si" } },
+                    { id: "segreteria_consulenti", label: "[Segreteria] Gestisce rapporti con consulente del lavoro/commercialista?", type: "radio", required: true, options: ["si", "no"], showIf: { field: "presenza_segreteria", equals: "si" } },
+                    // Conditional Collaboratori (odontoiatri O igienisti - corretto: prima si attivava solo con odontoiatri)
+                    { id: "collab_autonomia", label: "[Collaboratori] Come operano professionalmente?", type: "radio", required: true,
+                      options: [
+                        "in piena autonomia professionale, con coordinamento organizzativo limitato ad agenda e logistica",
+                        "in piena autonomia professionale, senza vincoli di coordinamento orario"
+                      ],
+                      help: "Per i collaboratori a P.IVA evitare qualsiasi formulazione che implichi subordinazione (es. 'supervisione diretta'): è un elemento che in sede ispettiva favorisce la riqualificazione del rapporto come lavoro subordinato.",
+                      showIf: [{ field: "presenza_odontoiatri_collab", equals: "si" }, { field: "presenza_igienisti", equals: "si" }] },
+                    { id: "collab_protocolli", label: "[Collaboratori] Devono rispettare i protocolli dello studio?", type: "radio", required: true, options: ["si", "no"], showIf: [{ field: "presenza_odontoiatri_collab", equals: "si" }, { field: "presenza_igienisti", equals: "si" }] },
+                    { id: "collab_documentazione", label: "[Collaboratori] Devono aggiornare la documentazione clinica?", type: "radio", required: true, options: ["si", "no"], showIf: [{ field: "presenza_odontoiatri_collab", equals: "si" }, { field: "presenza_igienisti", equals: "si" }] },
+                    { id: "collab_assicurazione", label: "[Collaboratori] Devono avere copertura assicurativa?", type: "radio", required: true, options: ["si", "no"], showIf: [{ field: "presenza_odontoiatri_collab", equals: "si" }, { field: "presenza_igienisti", equals: "si" }] },
+                    { id: "collab_comunicazione_variazioni", label: "[Collaboratori] Devono comunicare variazioni di iscrizione albo o copertura assicurativa?", type: "radio", required: true, options: ["si", "no"], showIf: [{ field: "presenza_odontoiatri_collab", equals: "si" }, { field: "presenza_igienisti", equals: "si" }] }
+                ]
+            },
+            {
+                id: "organizzazione_lavoro",
+                title: "Organizzazione del Lavoro",
+                fields: [
+                    { id: "orario_ordinario", label: "Orario ordinario di lavoro", type: "text", required: true },
+                    { id: "esistono_turni", label: "Esistono turni?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "descrizione_turni", label: "Descrizione turni", type: "textarea", required: false, showIf: { field: "esistono_turni", equals: "si" } },
+                    { id: "esiste_flessibilita", label: "Esiste flessibilità oraria?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "descrizione_flessibilita", label: "Descrizione flessibilità", type: "textarea", required: false, showIf: { field: "esiste_flessibilita", equals: "si" } },
+                    { id: "sistema_rilevazione_presenze", label: "Sistema di rilevazione presenze", type: "text", required: true },
+                    { id: "chi_definisce_turni", label: "Chi definisce turni e orari?", type: "text", required: true },
+                    { id: "preavviso_variazioni", label: "Preavviso richiesto per variazioni", type: "text", required: true },
+                    { id: "regole_apertura", label: "Regole apertura studio", type: "textarea", required: true },
+                    { id: "regole_chiusura", label: "Regole chiusura studio", type: "textarea", required: true },
+                    { id: "gestione_ritardi", label: "Gestione ritardi del personale", type: "textarea", required: true },
+                    { id: "previsto_straordinario", label: "È previsto straordinario?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "chi_autorizza_straordinario", label: "Chi autorizza lo straordinario?", type: "text", required: true }
+                ]
+            },
+            {
+                id: "ferie_permessi",
+                title: "Ferie, Permessi, Malattia e Assenze",
+                fields: [
+                    { id: "modalita_richiesta_ferie", label: "Modalità di richiesta ferie", type: "text", required: true },
+                    { id: "giorni_anticipo", label: "Giorni di anticipo richiesti", type: "text", required: true },
+                    { id: "ferie_collettive", label: "Sono previste ferie collettive?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "periodi_chiusura", label: "Periodi di chiusura programmata", type: "text", required: false },
+                    { id: "modalita_comunicazione_assenze", label: "Modalità comunicazione assenze improvvise", type: "text", required: true },
+                    { id: "referente_assenze", label: "Referente da avvisare", type: "text", required: true },
+                    { id: "canale_comunicazione", label: "Canale di comunicazione preferito (es. telefono, email)", type: "text", required: true },
+                    { id: "gestione_sostituzioni", label: "Gestione sostituzioni in caso di assenza", type: "textarea", required: true },
+                    { id: "modalita_comunicazione_malattia", label: "Modalità di comunicazione in caso di malattia", type: "text", required: true },
+                    { id: "termine_invio_certificato", label: "Termine per l'invio del certificato medico", type: "text", required: true },
+                    { id: "fasce_reperibilita", label: "Fasce orarie di reperibilità per visita fiscale", type: "text", required: true },
+                    { id: "permessi_legge", label: "Gestione permessi L.104/1992, congedi parentali e altri permessi di legge", type: "textarea", required: true }
+                ]
+            },
+            {
+                id: "gestione_paziente",
+                title: "Gestione del Paziente",
+                fields: [
+                    { id: "modalita_accoglienza", label: "Modalità di accoglienza del paziente", type: "textarea", required: true },
+                    { id: "regole_privacy_sala", label: "Regole privacy in sala d'attesa/reception", type: "textarea", required: true },
+                    { id: "gestione_paziente_ansioso", label: "Gestione del paziente ansioso", type: "textarea", required: true },
+                    { id: "gestione_paziente_aggressivo", label: "Gestione del paziente aggressivo o irrispettoso", type: "textarea", required: true },
+                    { id: "comunicazioni_pre_post", label: "Comunicazioni pre e post intervento", type: "textarea", required: true },
+                    { id: "accompagnamento_sala", label: "Accompagnamento in sala", type: "text", required: true },
+                    { id: "accompagnamento_post", label: "Accompagnamento post trattamento", type: "text", required: true },
+                    { id: "chi_dare_info_cliniche", label: "Chi è autorizzato a dare informazioni cliniche al paziente?", type: "text", required: true }
+                ]
+            },
+            {
+                id: "cartella_clinica",
+                title: "Cartella Clinica e Documentazione Sanitaria",
+                fields: [
+                    { id: "gestionale_utilizzato", label: "Gestionale utilizzato", type: "text", required: true },
+                    { id: "chi_aggiorna_cartella", label: "Chi aggiorna la cartella clinica?", type: "text", required: true },
+                    { id: "gestione_anamnesi", label: "Come viene gestita l'anamnesi?", type: "textarea", required: true },
+                    { id: "gestione_consensi", label: "Come vengono gestiti i consensi informati?", type: "textarea", required: true },
+                    { id: "gestione_foto", label: "Come vengono gestite le foto cliniche?", type: "textarea", required: true },
+                    { id: "gestione_radiografie", label: "Come vengono gestite radiografie/TAC?", type: "textarea", required: true },
+                    { id: "gestione_scansioni", label: "Come vengono gestite le scansioni intraorali?", type: "textarea", required: true },
+                    { id: "gestione_prescrizioni_lab", label: "Come vengono gestite le prescrizioni di laboratorio?", type: "textarea", required: true },
+                    { id: "dove_conservata", label: "Dove viene conservata la documentazione?", type: "text", required: true },
+                    { id: "chi_accede", label: "Chi può accedere alla documentazione?", type: "text", required: true }
+                ]
+            },
+            {
+                id: "sterilizzazione",
+                title: "Sterilizzazione, Sanificazione e Sala Operativa",
+                fields: [
+                    { id: "esiste_sala_sterilizzazione", label: "Esiste una sala sterilizzazione dedicata?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "chi_gestisce_sterilizzazione", label: "Chi gestisce la sterilizzazione?", type: "text", required: true },
+                    { id: "test_autoclave", label: "Come vengono eseguiti i test autoclave?", type: "textarea", required: true },
+                    { id: "tracciabilita_strumenti", label: "Come viene gestita la tracciabilità degli strumenti?", type: "textarea", required: true },
+                    { id: "preparazione_sala", label: "Come viene preparata la sala operativa?", type: "textarea", required: true },
+                    { id: "riordino_sala", label: "Come viene riordinata la sala post-trattamento?", type: "textarea", required: true },
+                    { id: "sanificazione_superfici", label: "Come vengono sanificate le superfici?", type: "textarea", required: true },
+                    { id: "gestione_taglienti", label: "Come vengono gestiti i materiali taglienti?", type: "textarea", required: true },
+                    { id: "gestione_rifiuti", label: "Come vengono gestiti i rifiuti sanitari?", type: "textarea", required: true },
+                    { id: "controllo_scadenze", label: "Come vengono controllate le scadenze dei materiali sterili?", type: "textarea", required: true }
+                ]
+            },
+            {
+                id: "laboratorio",
+                title: "Laboratorio Odontotecnico",
+                fields: [
+                    { id: "laboratorio_esterno", label: "Laboratorio esterno utilizzato (nomi o criteri)", type: "text", required: true },
+                    { id: "chi_invia_prescrizioni", label: "Chi invia le prescrizioni?", type: "text", required: true },
+                    { id: "chi_controlla_arrivo", label: "Chi controlla l'arrivo dei lavori?", type: "text", required: true },
+                    { id: "tracciamento_impronte", label: "Come si tracciano impronte/scansioni inviate?", type: "textarea", required: true },
+                    { id: "gestione_ritardi_errori", label: "Come si gestiscono ritardi o errori del laboratorio?", type: "textarea", required: true },
+                    { id: "chi_aggiorna_agenda_paziente", label: "Chi aggiorna l'agenda o il paziente in caso di variazioni?", type: "text", required: true }
+                ]
+            },
+            {
+                id: "magazzino",
+                title: "Magazzino Clinico e Approvvigionamenti",
+                fields: [
+                    { id: "chi_controlla_materiali", label: "Chi controlla i materiali?", type: "text", required: true },
+                    { id: "soglia_riordino", label: "Soglia di riordino definita?", type: "text", required: true },
+                    { id: "chi_comunica_esaurimenti", label: "Chi comunica gli esaurimenti?", type: "text", required: true },
+                    { id: "chi_autorizza_ordini", label: "Chi autorizza gli ordini?", type: "text", required: true },
+                    { id: "controllo_scadenze_mag", label: "Come si controllano le scadenze?", type: "textarea", required: true },
+                    { id: "gestione_materiali_chirurgici", label: "Come si gestiscono i materiali chirurgici?", type: "textarea", required: true },
+                    { id: "presenti_farmaci", label: "Sono presenti farmaci nello studio?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "gestione_farmaci", label: "Come vengono gestiti i farmaci?", type: "textarea", required: false, showIf: { field: "presenti_farmaci", equals: "si" } },
+                    { id: "gestione_dispositivi_medici", label: "Come si gestiscono i dispositivi medici?", type: "textarea", required: true }
+                ]
+            },
+            {
+                id: "software_controlli",
+                title: "Software, Strumenti Elettronici e Controlli",
+                fields: [
+                    { id: "gestionale_clinico", label: "Gestionale clinico", type: "text", required: true },
+                    { id: "software_amministrativo", label: "Software amministrativo", type: "text", required: true },
+                    { id: "software_radiologico", label: "Software radiologico", type: "text", required: true },
+                    { id: "scanner_intraorale", label: "Scanner intraorale (marca/modello)", type: "text", required: false },
+                    { id: "email_aziendale", label: "Email aziendale assegnata?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "badge", label: "Sistema di badge per accessi?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "log_accesso", label: "Log di accesso ai sistemi attivi?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "videosorveglianza", label: "Videosorveglianza presente?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "accordo_sindacale_o_itl", label: "Base giuridica per gli strumenti di controllo a distanza (badge/videosorveglianza/log), ai sensi dell'art. 4 L. 300/1970", type: "radio", required: true,
+                      options: ["Accordo con le rappresentanze sindacali", "Autorizzazione dell'Ispettorato Territoriale del Lavoro", "Nessuno strumento di controllo installato", "Da regolarizzare"],
+                      help: "Senza accordo sindacale o autorizzazione ITL, badge, videosorveglianza e log di accesso non sono legittimamente installabili: segnalarlo al consulente se la risposta è 'Da regolarizzare'." },
+                    { id: "informativa_privacy_consegnata", label: "Informativa privacy consegnata ai dipendenti?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "autorizzazioni_presenti", label: "Autorizzazioni necessarie presenti?", type: "radio", required: true, options: ["si", "no"] }
+                ]
+            },
+            {
+                id: "privacy",
+                title: "Privacy Sanitaria e Riservatezza",
+                fields: [
+                    { id: "dati_sanitari_trattati", label: "Tipologia di dati sanitari trattati", type: "textarea", required: true },
+                    { id: "chi_autorizzato_trattamento", label: "Chi è autorizzato al trattamento?", type: "text", required: true },
+                    { id: "dpo_nominato", label: "È stato nominato un DPO (Responsabile Protezione Dati)?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "nome_dpo", label: "Nominativo/recapiti del DPO", type: "text", required: false, showIf: { field: "dpo_nominato", equals: "si" } },
+                    { id: "regole_password", label: "Regole di gestione password", type: "textarea", required: true },
+                    { id: "canali_autorizzati", label: "Canali autorizzati per comunicazioni al paziente", type: "text", required: true },
+                    { id: "regole_condivisione", label: "Regole su condivisione dati pazienti tra staff", type: "textarea", required: true },
+                    { id: "previsto_nda", label: "È previsto NDA (accordo di riservatezza)?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "rapporti_fornitori", label: "Regole nei rapporti con fornitori esterni (nomina a responsabile del trattamento)", type: "textarea", required: true },
+                    { id: "regole_foto_dati", label: "Regole su foto e dati clinici (archiviazione e cancellazione)", type: "textarea", required: true }
+                ]
+            },
+            {
+                id: "social_media",
+                title: "Social Media e Immagini Cliniche",
+                fields: [
+                    { id: "uso_logo", label: "Uso del logo dello studio da parte dei dipendenti", type: "radio", required: true, options: ["consentito con autorizzazione", "vietato"] },
+                    { id: "pubblicazione_foto_studio", label: "Pubblicazione foto dello studio sui social personali", type: "radio", required: true, options: ["consentita", "vietata"] },
+                    { id: "pubblicazione_immagini_pazienti", label: "Pubblicazione immagini pazienti", type: "radio", required: true, options: ["solo con consenso scritto specifico", "vietata"] },
+                    { id: "foto_prima_dopo", label: "Foto prima/dopo", type: "radio", required: true, options: ["solo con consenso scritto specifico", "vietata"] },
+                    { id: "video_clinici", label: "Video clinici", type: "radio", required: true, options: ["solo con consenso scritto specifico", "vietata"] },
+                    { id: "uso_whatsapp", label: "Uso di WhatsApp per comunicazioni di lavoro", type: "radio", required: true, options: ["consentito per urgenze", "vietato"] },
+                    { id: "chat_interne", label: "Chat interne (es. gruppi di lavoro)", type: "text", required: true },
+                    { id: "chi_gestisce_social", label: "Chi gestisce i profili social ufficiali dello studio?", type: "text", required: true }
+                ]
+            },
+            {
+                id: "salute_sicurezza",
+                title: "Salute e Sicurezza",
+                fields: [
+                    { id: "dpi_previsti", label: "DPI previsti", type: "textarea", required: true },
+                    { id: "rischio_biolologico", label: "Misure per rischio biologico", type: "textarea", required: true },
+                    { id: "rischio_radiologico", label: "Misure per rischio radiologico", type: "textarea", required: true },
+                    { id: "primo_soccorso", label: "Addetti e procedure primo soccorso", type: "text", required: true },
+                    { id: "antincendio", label: "Addetti e procedure antincendio", type: "text", required: true },
+                    { id: "radioprotezione", label: "Esperto di radioprotezione e misure", type: "text", required: true },
+                    { id: "sorveglianza_sanitaria", label: "È prevista sorveglianza sanitaria obbligatoria?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "medico_competente", label: "Nominativo del Medico Competente", type: "text", required: false, showIf: { field: "sorveglianza_sanitaria", equals: "si" } },
+                    { id: "periodicita_visite", label: "Periodicità delle visite mediche", type: "text", required: false, showIf: { field: "sorveglianza_sanitaria", equals: "si" } },
+                    { id: "rls_presente", label: "È stato eletto/designato un RLS (Rappresentante dei Lavoratori per la Sicurezza)?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "nome_rls", label: "Nominativo RLS", type: "text", required: false, showIf: { field: "rls_presente", equals: "si" } },
+                    { id: "formazione_rischio_alto", label: "Formazione rischio alto erogata?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "procedure_emergenza", label: "Procedure di emergenza", type: "textarea", required: true },
+                    { id: "segnalazione_rischi", label: "Modalità di segnalazione rischi", type: "textarea", required: true },
+                    { id: "referente_sicurezza", label: "Referente sicurezza (RSPP)", type: "text", required: true }
+                ]
+            },
+            {
+                id: "formazione",
+                title: "Formazione e Aggiornamento",
+                fields: [
+                    { id: "aggiornamento_aso", label: "Piano di aggiornamento ASO", type: "textarea", required: true },
+                    { id: "ecm_sanitari", label: "Gestione ECM per sanitari", type: "textarea", required: true },
+                    { id: "formazione_sicurezza", label: "Formazione sicurezza periodica", type: "text", required: true },
+                    { id: "formazione_radioprotezione", label: "Formazione radioprotezione", type: "text", required: true },
+                    { id: "formazione_software", label: "Formazione software gestionale", type: "text", required: true },
+                    { id: "formazione_protocolli", label: "Formazione sui protocolli interni", type: "text", required: true },
+                    { id: "chi_sostiene_costi", label: "Chi sostiene i costi della formazione obbligatoria?", type: "text", required: true },
+                    { id: "quando_si_svolge", label: "Quando si svolge la formazione (in orario di lavoro o extra)?", type: "text", required: true }
+                ]
+            },
+            {
+                id: "errore_criticita",
+                title: "Gestione dell'Errore e Criticità",
+                fields: [
+                    { id: "come_segnalare_errori", label: "Come segnalare errori", type: "textarea", required: true },
+                    { id: "a_chi_segnalarli", label: "A chi segnalarli", type: "text", required: true },
+                    { id: "entro_quando", label: "Entro quando dalla scoperta", type: "text", required: true },
+                    { id: "esiste_registro_criticità", label: "Esiste un registro delle criticità?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "gestione_reclami", label: "Gestione reclami paziente", type: "textarea", required: true },
+                    { id: "gestione_ritardi_clinici", label: "Gestione ritardi clinici imprevisti", type: "textarea", required: true },
+                    { id: "gestione_guasti", label: "Gestione guasti apparecchiature", type: "textarea", required: true },
+                    { id: "cosa_non_tollerato", label: "Cosa NON è tollerato (seleziona tutte le opzioni applicabili)", type: "checkbox", required: true, options: ["Nascondere errori", "Omettere informazioni rilevanti", "Scaricare responsabilità", "Prendere iniziative non autorizzate", "Non segnalare rischi", "Non segnalare danni o guasti"] }
+                ]
+            },
+            {
+                id: "conflitto_interessi",
+                title: "Conflitto di Interessi e Concorrenza",
+                fields: [
+                    { id: "collaborazioni_esterne", label: "Regole su collaborazioni esterne", type: "textarea", required: true },
+                    { id: "collaborazioni_concorrenti", label: "Regole su collaborazioni con studi concorrenti", type: "textarea", required: true },
+                    { id: "comunicazione_conflitti", label: "Obbligo di comunicazione tempestiva di potenziali conflitti", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "uso_relazioni_studio", label: "Divieto di uso delle relazioni dello studio per fini personali", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "uso_know_how", label: "Tutela del know-how aziendale", type: "textarea", required: true },
+                    { id: "riservatezza_cessazione", label: "Obbligo di riservatezza mantenuto dopo la cessazione del rapporto", type: "radio", required: true, options: ["si", "no"] }
+                ]
+            },
+            {
+                id: "disciplinare",
+                title: "Disposizioni Disciplinari",
+                fields: [
+                    { id: "richiamo_ccnl", label: "Richiamo esplicito alle sanzioni del CCNL applicato", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "modalita_pubblicazione", label: "Modalità di pubblicazione/consegna del regolamento", type: "radio", required: true,
+                      options: ["Affissione fisica in luogo accessibile a tutti i lavoratori", "Affissione fisica + invio digitale", "Consegna a mano con ricevuta", "Invio digitale (email/gestionale)"],
+                      help: "Ai sensi dell'art. 7 L. 300/1970, la validità disciplinare del regolamento dipende dall'affissione fisica in luogo accessibile a tutti: la sola comunicazione digitale non è sufficiente, salvo obblighi di legge già noti ai lavoratori." },
+                    { id: "firma_presa_visione", label: "È richiesta la firma per presa visione?", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "esempi_non_conformi", label: "Esempi di comportamenti non conformi (riassuntivo)", type: "textarea", required: true },
+                    { id: "procedura_contestazione", label: "Procedura di contestazione disciplinare (riferimento normativo)", type: "text", required: true }
+                ]
+            },
+            {
+                id: "revisione",
+                title: "Revisione del Regolamento",
+                fields: [
+                    { id: "modalita_revisione", label: "Modalità e tempistica di revisione/aggiornamento del regolamento", type: "textarea", required: true }
+                ]
+            },
+            {
+                id: "entrata_vigore",
+                title: "Entrata in Vigore e Firme",
+                fields: [
+                    { id: "luogo", label: "Luogo di sottoscrizione", type: "text", required: true },
+                    { id: "data_firma", label: "Data", type: "date", required: true },
+                    { id: "nome_titolare_firma", label: "Nome e Cognome del Titolare", type: "text", required: true },
+                    { id: "nome_dipendente_firma", label: "Spazio per Nome e Cognome del Dipendente/Collaboratore", type: "text", required: true },
+                    { id: "presa_visione", label: "Dichiarazione di presa visione", type: "radio", required: true, options: ["si", "no"] },
+                    { id: "accettazione", label: "Dichiarazione di accettazione", type: "radio", required: true, options: ["si", "no"] }
+                ]
+            }
+        ];
+
+        // --- 2. STATE MANAGEMENT ---
+        let currentState = {};
+        let currentStepIndex = 0;
+        let draftExists = false;
+
+        function loadState() {
+            const saved = localStorage.getItem('epa_regolamento_state');
+            const savedStep = localStorage.getItem('epa_regolamento_step');
+            if (saved) {
+                currentState = JSON.parse(saved);
+            }
+            if (savedStep) {
+                currentStepIndex = parseInt(savedStep, 10) || 0;
+            }
+        }
+
+        function saveState() {
+            localStorage.setItem('epa_regolamento_state', JSON.stringify(currentState));
+            localStorage.setItem('epa_regolamento_step', String(currentStepIndex));
+        }
+
+        function checkForDraft() {
+            const saved = localStorage.getItem('epa_regolamento_state');
+            draftExists = !!(saved && Object.keys(JSON.parse(saved)).length > 0);
+            document.getElementById('resume-banner').style.display = draftExists ? 'block' : 'none';
+        }
+
+        function resumeDraft() {
+            loadState();
+            renderStep();
+            showScreen('wizard-screen');
+        }
+
+        function discardDraft() {
+            if (!confirm("Sei sicuro di voler eliminare la bozza salvata? L'operazione non è reversibile.")) return;
+            localStorage.removeItem('epa_regolamento_state');
+            localStorage.removeItem('epa_regolamento_step');
+            currentState = {};
+            currentStepIndex = 0;
+            draftExists = false;
+            document.getElementById('resume-banner').style.display = 'none';
+        }
+
+        function manualSave() {
+            saveState();
+            const toast = document.getElementById('save-toast');
+            toast.classList.add('visible');
+            setTimeout(() => toast.classList.remove('visible'), 2000);
+        }
+
+        function exportDraft() {
+            const payload = { state: currentState, step: currentStepIndex, exportedAt: new Date().toISOString() };
+            const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const nomeFile = (currentState.nome_studio || 'studio').replace(/[^a-z0-9]/gi, '_');
+            a.href = url;
+            a.download = `bozza-regolamento-${nomeFile}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function importDraft(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const payload = JSON.parse(e.target.result);
+                    currentState = payload.state || payload;
+                    currentStepIndex = payload.step || 0;
+                    saveState();
+                    renderStep();
+                    showScreen('wizard-screen');
+                } catch (err) {
+                    alert("Il file selezionato non è una bozza valida.");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // --- 3. UI RENDERING ---
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById(screenId).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        function startWizard() {
+            if (draftExists) {
+                resumeDraft();
+            } else {
+                loadState();
+                currentStepIndex = 0;
+                renderStep();
+                showScreen('wizard-screen');
+            }
+        }
+
+        function checkCondition(field) {
+            if (!field.showIf) return true;
+            const conditions = Array.isArray(field.showIf) ? field.showIf : [field.showIf];
+            return conditions.some(c => currentState[c.field] === c.equals);
+        }
+
+        function renderStep() {
+            const step = SCHEMA[currentStepIndex];
+            const container = document.getElementById('wizard-form-container');
+            document.getElementById('current-step-num').textContent = currentStepIndex + 1;
+            document.getElementById('total-steps-num').textContent = SCHEMA.length;
+
+            const progress = ((currentStepIndex + 1) / SCHEMA.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+
+            let html = `<h2>${step.title}</h2>`;
+
+            step.fields.forEach(field => {
+                if (!checkCondition(field)) return;
+
+                const value = currentState[field.id] || '';
+                const requiredMark = field.required ? '<span class="required">*</span>' : '';
+
+                html += `<div class="form-group" id="group-${field.id}">`;
+                html += `<label for="${field.id}">${field.label} ${requiredMark}</label>`;
+
+                if (field.type === 'textarea') {
+                    html += `<textarea id="${field.id}" name="${field.id}" rows="3" oninput="updateState('${field.id}', this.value)">${value}</textarea>`;
+                } else if (field.type === 'select') {
+                    html += `<select id="${field.id}" name="${field.id}" onchange="updateState('${field.id}', this.value)">`;
+                    html += `<option value="">Seleziona...</option>`;
+                    field.options.forEach(opt => {
+                        const selected = value === opt ? 'selected' : '';
+                        html += `<option value="${opt}" ${selected}>${opt}</option>`;
+                    });
+                    html += `</select>`;
+                } else if (field.type === 'radio') {
+                    html += `<div class="radio-group">`;
+                    field.options.forEach(opt => {
+                        const checked = value === opt ? 'checked' : '';
+                        const optLabel = opt.charAt(0).toUpperCase() + opt.slice(1);
+                        html += `<label><input type="radio" name="${field.id}" value="${opt}" ${checked} onchange="updateState('${field.id}', this.value)"> ${optLabel}</label>`;
+                    });
+                    html += `</div>`;
+                } else if (field.type === 'checkbox') {
+                    html += `<div class="checkbox-group">`;
+                    const currentValues = value ? value.split(',') : [];
+                    field.options.forEach(opt => {
+                        const checked = currentValues.includes(opt) ? 'checked' : '';
+                        html += `<label><input type="checkbox" name="${field.id}" value="${opt}" ${checked} onchange="updateCheckboxState('${field.id}', this.value, this.checked)"> ${opt}</label>`;
+                    });
+                    html += `</div>`;
+                } else {
+                    html += `<input type="${field.type}" id="${field.id}" name="${field.id}" value="${value}" oninput="updateState('${field.id}', this.value)">`;
+                }
+
+                if (field.help) {
+                    html += `<div class="warning-text">${field.help}</div>`;
+                }
+
+                html += `<div class="error-msg">Questo campo è obbligatorio</div>`;
+                html += `</div>`;
+            });
+
+            container.innerHTML = html;
+
+            document.getElementById('btn-back').style.visibility = currentStepIndex === 0 ? 'hidden' : 'visible';
+            document.getElementById('btn-next').textContent = currentStepIndex === SCHEMA.length - 1 ? 'Genera Documento' : 'Avanti';
+        }
+
+        function updateState(fieldId, value) {
+            currentState[fieldId] = value;
+            saveState();
+            document.getElementById(`group-${fieldId}`).classList.remove('invalid');
+
+            const step = SCHEMA[currentStepIndex];
+            const hasDependents = step.fields.some(f => {
+                if (!f.showIf) return false;
+                const conditions = Array.isArray(f.showIf) ? f.showIf : [f.showIf];
+                return conditions.some(c => c.field === fieldId);
+            });
+            if (hasDependents) {
+                renderStep();
+            }
+        }
+
+        function updateCheckboxState(fieldId, value, isChecked) {
+            let currentValues = currentState[fieldId] ? currentState[fieldId].split(',') : [];
+            if (isChecked) {
+                if (!currentValues.includes(value)) currentValues.push(value);
+            } else {
+                currentValues = currentValues.filter(v => v !== value);
+            }
+            currentState[fieldId] = currentValues.join(',');
+            saveState();
+            document.getElementById(`group-${fieldId}`).classList.remove('invalid');
+        }
+
+        function validateStep() {
+            const step = SCHEMA[currentStepIndex];
+            let isValid = true;
+
+            step.fields.forEach(field => {
+                if (!checkCondition(field)) return;
+
+                const value = currentState[field.id];
+                const group = document.getElementById(`group-${field.id}`);
+
+                if (field.required && (!value || value.trim() === '')) {
+                    group.classList.add('invalid');
+                    isValid = false;
+                } else {
+                    group.classList.remove('invalid');
+                }
+            });
+
+            return isValid;
+        }
+
+        function nextStep() {
+            if (!validateStep()) {
+                alert("Per favore, compila tutti i campi obbligatori contrassegnati con *");
+                return;
+            }
+            saveState();
+
+            if (currentStepIndex < SCHEMA.length - 1) {
+                currentStepIndex++;
+                renderStep();
+                window.scrollTo(0, 0);
+            } else {
+                generateAndShowPreview();
+            }
+        }
+
+        function prevStep() {
+            if (currentStepIndex > 0) {
+                currentStepIndex--;
+                saveState();
+                renderStep();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function restartWizard() {
+            if (confirm("Sei sicuro di voler ricominciare? Tutti i dati inseriti verranno cancellati.")) {
+                localStorage.removeItem('epa_regolamento_state');
+                localStorage.removeItem('epa_regolamento_step');
+                currentState = {};
+                currentStepIndex = 0;
+                draftExists = false;
+                document.getElementById('resume-banner').style.display = 'none';
+                showScreen('home-screen');
+            }
+        }
+
+        // --- 4. DOCUMENT GENERATION LOGIC ---
+        let articleCounter = 0;
+        let puntiAperti = [];
+
+        function sectionHeader(title) {
+            articleCounter++;
+            return `<h2>Articolo ${articleCounter}: ${title}</h2>`;
+        }
+
+        function flagOpen(label, detail) {
+            puntiAperti.push({ label, detail: detail || '(da definire)' });
+        }
+
+        function isUnformalized(text) {
+            if (!text) return true;
+            return /non\s+(attiv|esist|previst|in essere|formal)|da\s+(ri)?veder|da\s+definir|assente|non\s+ancora|non\s+applicabile/i.test(text);
+        }
+
+        // Wraps a free-text answer in narrative form, or diverts it to the
+        // "Punti aperti" annex when it reads as an unformalized/missing procedure.
+        function textClause(value, label, wrapFn) {
+            if (!value || isUnformalized(value)) {
+                flagOpen(label, value || '(risposta non fornita)');
+                return null;
+            }
+            return wrapFn(value);
+        }
+
+        // Boolean (si/no) safeguard clause: true branch is written into the
+        // regulation, false branch is diverted to the annex instead of being
+        // stated as a rule the Studio does not actually follow.
+        function boolClause(value, label, yesText, noDetail) {
+            if (value === 'si') return yesText;
+            flagOpen(label, noDetail || 'Non risulta attualmente attivo/previsto presso lo Studio.');
+            return null;
+        }
+
+        function commi(artNum, items) {
+            let n = 0;
+            return items
+                .filter((x) => x !== null && x !== false && x !== undefined && String(x).trim() !== '')
+                .map((text) => {
+                    n++;
+                    return `<p style="margin-left:0;"><strong>${artNum}.${n}.</strong> ${text}</p>`;
+                })
+                .join('');
+        }
+
+        function bulletList(items) {
+            const filtered = items.filter((x) => x !== null && x !== false && x !== undefined && String(x).trim() !== '');
+            if (!filtered.length) return '';
+            return `<ul>${filtered.map((t) => `<li>${t}</li>`).join('')}</ul>`;
+        }
+
+        function infoTable(rows) {
+            const filtered = rows.filter((r) => r[1] !== null && r[1] !== undefined && String(r[1]).trim() !== '');
+            if (!filtered.length) return '';
+            let html = `<table style="width:100%; border-collapse:collapse; margin:0.8rem 0 1.2rem 0;">`;
+            filtered.forEach(([label, value]) => {
+                html += `<tr>
+                    <td style="border:1px solid #E4E7EC; background:#F7F8FA; padding:6pt 10pt; font-weight:bold; color:#0D2839; width:35%;">${label}</td>
+                    <td style="border:1px solid #E4E7EC; padding:6pt 10pt;">${value}</td>
+                </tr>`;
+            });
+            html += `</table>`;
+            return html;
+        }
+
+        function rolesTable(rows) {
+            let html = `<table style="width:100%; border-collapse:collapse; margin:0.8rem 0 1.2rem 0;">
+                <tr>
+                    <td style="border:1px solid #E4E7EC; background:#0D2839; color:#fff; padding:6pt 10pt; font-weight:bold;">Ruolo</td>
+                    <td style="border:1px solid #E4E7EC; background:#0D2839; color:#fff; padding:6pt 10pt; font-weight:bold;">Compiti previsti</td>
+                </tr>`;
+            rows.forEach(([role, tasks]) => {
+                html += `<tr>
+                    <td style="border:1px solid #E4E7EC; padding:6pt 10pt; font-weight:bold; vertical-align:top; width:28%;">${role}</td>
+                    <td style="border:1px solid #E4E7EC; padding:6pt 10pt;">${tasks}</td>
+                </tr>`;
+            });
+            html += `</table>`;
+            return html;
+        }
+
+        function generateAndShowPreview() {
+            const docHtml = generateDocument(currentState);
+            document.getElementById('preview-content').innerHTML = docHtml;
+            showScreen('preview-screen');
+        }
+
+        function generateDocument(data) {
+            articleCounter = 0;
+            puntiAperti = [];
+            let html = '';
+            html += renderPremessa(data);
+            html += renderDefinizioni(data);
+            html += renderDatiStudio(data);
+            html += renderAmbitoApplicazione(data);
+            html += renderPrincipi(data);
+            html += renderRuoliResponsabilita(data);
+            html += renderOrganizzazioneLavoro(data);
+            html += renderFeriePermessiAssenze(data);
+            html += renderGestionePaziente(data);
+            html += renderCartellaClinica(data);
+            html += renderSterilizzazione(data);
+            html += renderLaboratorio(data);
+            html += renderMagazzino(data);
+            html += renderSoftwareControlli(data);
+            html += renderPrivacy(data);
+            html += renderSocialMedia(data);
+            html += renderSicurezza(data);
+            html += renderFormazione(data);
+            html += renderErroreCriticita(data);
+            html += renderConflittoInteressi(data);
+            html += renderDisciplinare(data);
+            html += renderRinvioFonti(data);
+            html += renderRevisione(data);
+            html += renderAllegati(data);
+            html += renderEntrataVigore(data);
+            html += renderAllegatoA(data);
+            return html;
+        }
+
+        function renderPremessa(data) {
+            return `
+                <div class="disclaimer">
+                    <strong>Nota Importante:</strong> Il presente documento costituisce una bozza organizzativa e disciplinare da sottoporre alla verifica del consulente del lavoro o di un professionista abilitato, al fine di garantirne la piena coerenza con la normativa vigente, il CCNL applicato e la situazione specifica dello Studio.
+                </div>
+                <h1 style="text-align:center; margin-bottom:2rem;">REGOLAMENTO AZIENDALE<br>${data.nome_studio || 'Studio Odontoiatrico'}</h1>
+            `;
+        }
+
+        function renderDefinizioni(data) {
+            if (!data.nome_studio) return '';
+            const hasCollab = data.presenza_odontoiatri_collab === 'si' || data.presenza_igienisti === 'si';
+            const items = [
+                `<strong>Titolare:</strong> il legale rappresentante dello Studio${data.nome_titolare ? `, ${data.nome_titolare}` : ''}.`,
+                `<strong>Personale:</strong> i lavoratori dipendenti e i tirocinanti che operano presso lo Studio.`,
+                data.presenza_aso_cso === 'si' ? `<strong>ASO/CSO:</strong> l'Assistente/Collaboratore di Studio Odontoiatrico.` : null,
+                hasCollab ? `<strong>Collaboratore:</strong> il professionista sanitario (odontoiatra o igienista dentale) che opera con lo Studio in regime di libera professione, sulla base di un contratto individuale di collaborazione.` : null,
+                data.gestionale_utilizzato ? `<strong>Gestionale:</strong> il software "${data.gestionale_utilizzato}" in uso presso lo Studio.` : null,
+                `<strong>Paziente:</strong> la persona assistita presso lo Studio.`,
+            ];
+            let html = `<h2>Definizioni</h2>`;
+            html += `<p>Ai fini del presente Regolamento, salvo diversa indicazione, si intende per:</p>`;
+            html += bulletList(items);
+            return html;
+        }
+
+        function renderDatiStudio(data) {
+            if (!data.nome_studio) return '';
+            let html = sectionHeader("Dati dello Studio");
+            html += infoTable([
+                ["Denominazione commerciale", data.nome_studio],
+                ["Ragione sociale", data.ragione_sociale],
+                ["Partita IVA", data.p_iva],
+                ["Sede legale", data.sede_legale],
+                ["Sede operativa", data.sede_operativa],
+                ["Titolare / Legale Rappresentante", data.nome_titolare],
+                ["Direttore Sanitario", data.direttore_sanitario],
+                ["CCNL applicato", data.ccnl],
+                ["Data di entrata in vigore", data.data_entrata_vigore],
+            ]);
+            return html;
+        }
+
+        function renderAmbitoApplicazione(data) {
+            const artNum = articleCounter + 1;
+            const hasCollab = data.presenza_odontoiatri_collab === 'si' || data.presenza_igienisti === 'si';
+            let html = sectionHeader("Ambito di Applicazione");
+            let divisaText = null;
+            if (data.divisa_obbligatoria === 'si' || data.cartellino_riconoscimento === 'si') {
+                const parts = [];
+                if (data.divisa_obbligatoria === 'si') parts.push("indossare la divisa/l'abbigliamento da lavoro previsto dallo Studio");
+                if (data.cartellino_riconoscimento === 'si') parts.push("esporre il cartellino di riconoscimento durante l'attività lavorativa");
+                divisaText = `Il Personale è tenuto a ${parts.join(' e a ')}.`;
+            }
+            html += commi(artNum, [
+                "Il presente Regolamento si applica a tutto il personale dipendente e ai tirocinanti che operano presso lo Studio, nel rispetto della normativa vigente e del CCNL applicato. Esso integra e specifica le obbligazioni contrattuali, senza sostituirsi ad esse.",
+                hasCollab ? "Il presente Regolamento non si applica ai professionisti che collaborano con lo Studio in regime di libera professione (partita IVA), i cui rapporti sono disciplinati dai rispettivi contratti individuali di collaborazione." : null,
+                divisaText,
+            ]);
+            return html;
+        }
+
+        function renderPrincipi(data) {
+            if (!data.valori_fondamentali) return '';
+            const artNum = articleCounter + 1;
+            let html = sectionHeader("Principi Organizzativi e Standard Clinici");
+            html += commi(artNum, [
+                `Lo Studio orienta la propria attività ai seguenti valori fondamentali: ${data.valori_fondamentali}.`,
+                `Gli standard di qualità clinica e organizzativa adottati dallo Studio prevedono: ${data.standard_qualita}.`,
+                `Nei confronti del paziente, il Personale è tenuto a: ${data.comportamenti_pazienti}.`,
+                `Nei rapporti tra colleghi, il Personale è tenuto a: ${data.comportamenti_colleghi}.`,
+                `Non sono accettabili i seguenti comportamenti: ${data.comportamenti_non_accettabili}.`,
+                data.miglioramento_continuo === 'si'
+                    ? "Il miglioramento continuo costituisce parte integrante della cultura organizzativa dello Studio."
+                    : "Il presente Regolamento è soggetto a revisioni periodiche secondo criteri di proporzionalità e ragionevolezza.",
+            ]);
+            return html;
+        }
+
+        function renderRuoliResponsabilita(data) {
+            const artNum = articleCounter + 1;
+            let html = sectionHeader("Ruoli e Responsabilità");
+            html += `<p>Le attività assegnate sono svolte nel rispetto della qualifica, dell'inquadramento contrattuale, della formazione ricevuta, delle competenze proprie del ruolo e delle direttive aziendali applicabili.</p>`;
+
+            const rows = [];
+            if (data.presenza_aso_cso === 'si') {
+                const tasks = [
+                    data.aso_supporto_clinico === 'si' ? "supporto all'attività clinica" : null,
+                    data.aso_preparazione_sale === 'si' ? "preparazione delle sale operative" : null,
+                    data.aso_sterilizzazione === 'si' ? "gestione della sterilizzazione" : null,
+                    data.aso_sanificazione === 'si' ? "gestione della sanificazione" : null,
+                    data.aso_magazzino === 'si' ? "gestione del magazzino clinico" : null,
+                    data.aso_segnalazione_materiali === 'si' ? "segnalazione dei materiali in esaurimento" : null,
+                    data.aso_documentazione === 'si' ? "supporto alla documentazione clinica" : null,
+                    data.aso_scansioni_foto === 'si' ? "gestione di scansioni, impronte, foto o prescrizioni" : null,
+                ].filter(Boolean);
+                rows.push(["ASO / CSO", tasks.length ? tasks.join('; ') + '.' : 'Nessun compito specifico indicato.']);
+            }
+            if (data.presenza_segreteria === 'si') {
+                const tasks = [
+                    data.segreteria_agenda === 'si' ? "gestione dell'agenda" : null,
+                    data.segreteria_richiami === 'si' ? "gestione dei richiami" : null,
+                    data.segreteria_preventivi === 'si' ? "gestione dei preventivi" : null,
+                    data.segreteria_pagamenti === 'si' ? "gestione dei pagamenti" : null,
+                    data.segreteria_rapporto_pazienti === 'si' ? "rapporto diretto con i pazienti" : null,
+                    data.segreteria_ordini === 'si' ? "gestione degli ordini" : null,
+                    data.segreteria_laboratorio === 'si' ? "rapporti con il laboratorio odontotecnico" : null,
+                    data.segreteria_consulenti === 'si' ? "rapporti con i consulenti esterni" : null,
+                ].filter(Boolean);
+                rows.push(["Segreteria", tasks.length ? tasks.join('; ') + '.' : 'Nessun compito specifico indicato.']);
+            }
+            if (data.presenza_odontoiatri_collab === 'si' || data.presenza_igienisti === 'si') {
+                const tasks = [
+                    `operano ${data.collab_autonomia || 'in piena autonomia professionale'}`,
+                    data.collab_protocolli === 'si' ? "rispettano i protocolli clinici e operativi dello Studio" : null,
+                    data.collab_documentazione === 'si' ? "aggiornano tempestivamente la documentazione clinica" : null,
+                    data.collab_assicurazione === 'si' ? "mantengono una copertura assicurativa professionale in corso di validità" : null,
+                    data.collab_comunicazione_variazioni === 'si' ? "comunicano tempestivamente eventuali variazioni di iscrizione all'Albo o di copertura assicurativa" : null,
+                ].filter(Boolean);
+                rows.push(["Odontoiatri e Igienisti Collaboratori", tasks.length ? tasks.join('; ') + '.' : 'Nessun compito specifico indicato.']);
+            }
+            if (rows.length) html += rolesTable(rows);
+
+            html += commi(artNum, [
+                `Le mansioni quotidiane sono assegnate da: ${data.chi_assegna_mansioni || 'non specificato'}.`,
+                `In caso di dubbio sulle modalità di svolgimento delle attività, le istruzioni sono richieste a: ${data.a_chi_chiedere_istruzioni || 'non specificato'}.`,
+            ]);
+            return html;
+        }
+
+        function renderOrganizzazioneLavoro(data) {
+            if (!data.orario_ordinario) return '';
+            const artNum = articleCounter + 1;
+            let html = sectionHeader("Organizzazione del Lavoro");
+            html += commi(artNum, [
+                `L'orario ordinario di lavoro è: ${data.orario_ordinario}.`,
+                data.esistono_turni === 'si' ? `I turni sono organizzati come segue: ${data.descrizione_turni}.` : null,
+                data.esiste_flessibilita === 'si' ? `È prevista la seguente flessibilità oraria: ${data.descrizione_flessibilita}.` : null,
+                `La rilevazione delle presenze avviene con le seguenti modalità: ${data.sistema_rilevazione_presenze}.`,
+                `I turni e gli orari sono definiti da: ${data.chi_definisce_turni}, con un preavviso di: ${data.preavviso_variazioni}.`,
+                `L'apertura dello Studio segue le seguenti regole: ${data.regole_apertura}.`,
+                `La chiusura dello Studio segue le seguenti regole: ${data.regole_chiusura}.`,
+                `In caso di ritardo, si applica quanto segue: ${data.gestione_ritardi}.`,
+                data.previsto_straordinario === 'si'
+                    ? `Ogni prestazione oltre l'orario ordinario è preventivamente autorizzata da ${data.chi_autorizza_straordinario}, salvo comprovate urgenze organizzative, nel rispetto dei limiti previsti dalla legge e dal CCNL applicato.`
+                    : "Non è prevista l'effettuazione di lavoro straordinario.",
+            ]);
+            return html;
+        }
+
+        function renderFeriePermessiAssenze(data) {
+            if (!data.modalita_richiesta_ferie) return '';
+            const artNum = articleCounter + 1;
+            let html = sectionHeader("Ferie, Permessi, Malattia e Assenze");
+            html += commi(artNum, [
+                `La richiesta di ferie avviene con le seguenti modalità: ${data.modalita_richiesta_ferie}, con un anticipo minimo di ${data.giorni_anticipo}.`,
+                data.ferie_collettive === 'si' ? `Sono previsti periodi di chiusura collettiva${data.periodi_chiusura ? `: ${data.periodi_chiusura}` : ''}.` : null,
+                `In caso di assenza improvvisa, il Personale ne dà comunicazione a ${data.referente_assenze} tramite ${data.canale_comunicazione}, secondo le seguenti modalità: ${data.modalita_comunicazione_assenze}.`,
+                `Le sostituzioni sono gestite come segue: ${data.gestione_sostituzioni}.`,
+                `In caso di malattia, la comunicazione avviene con le seguenti modalità: ${data.modalita_comunicazione_malattia}; il certificato medico è inviato entro ${data.termine_invio_certificato}.`,
+                `La reperibilità per la visita fiscale è la seguente: ${data.fasce_reperibilita}, secondo quanto previsto dalla normativa vigente e dal CCNL applicato.`,
+                `I permessi previsti dalla legge (L. 104/1992, congedi parentali e altri permessi) sono gestiti come segue: ${data.permessi_legge}.`,
+            ]);
+            return html;
+        }
+
+        function renderGestionePaziente(data) {
+            if (!data.modalita_accoglienza) return '';
+            const artNum = articleCounter + 1;
+            let html = sectionHeader("Gestione del Paziente");
+            html += commi(artNum, [
+                `L'accoglienza del paziente avviene come segue: ${data.modalita_accoglienza}.`,
+                textClause(data.regole_privacy_sala, "Privacy in sala d'attesa/reception", (v) => `La riservatezza delle informazioni del paziente in sala d'attesa e in reception è gestita come segue: ${v}.`),
+                `Nei confronti del paziente ansioso, il Personale adotta il seguente comportamento: ${data.gestione_paziente_ansioso}.`,
+                `Nei confronti del paziente aggressivo o irrispettoso, il Personale adotta il seguente comportamento: ${data.gestione_paziente_aggressivo}.`,
+                textClause(data.comunicazioni_pre_post, "Comunicazioni pre e post-trattamento", (v) => `Le comunicazioni pre e post-trattamento con il paziente avvengono come segue: ${v}.`),
+                `L'accompagnamento del paziente avviene come segue: in sala, ${data.accompagnamento_sala}; post-trattamento, ${data.accompagnamento_post}.`,
+                `Le informazioni cliniche possono essere fornite esclusivamente da: ${data.chi_dare_info_cliniche}.`,
+            ]);
+            return html;
+        }
+
+        function renderCartellaClinica(data) {
+            if (!data.gestionale_utilizzato) return '';
+            const artNum = articleCounter + 1;
+            let html = sectionHeader("Cartella Clinica e Documentazione Sanitaria");
+            html += commi(artNum, [
+                `La documentazione clinica è gestita attraverso il gestionale: ${data.gestionale_utilizzato}.`,
+                `L'aggiornamento della cartella clinica è a cura di: ${data.chi_aggiorna_cartella}.`,
+                `La raccolta dell'anamnesi avviene come segue: ${data.gestione_anamnesi}.`,
+                `Il consenso informato è gestito come segue: ${data.gestione_consensi}.`,
+                `Le fotografie cliniche sono gestite come segue: ${data.gestione_foto}.`,
+                `Le radiografie e le TAC sono gestite come segue: ${data.gestione_radiografie}.`,
+                `Le scansioni intraorali sono gestite come segue: ${data.gestione_scansioni}.`,
+                `Le prescrizioni al laboratorio odontotecnico sono gestite come segue: ${data.gestione_prescrizioni_lab}.`,
+                `La documentazione clinica è conservata presso: ${data.dove_conservata}. L'accesso è riservato a: ${data.chi_accede}.`,
+            ]);
+            return html;
+        }
+
+        function renderSterilizzazione(data) {
+            if (!data.esiste_sala_sterilizzazione) return '';
+            const artNum = articleCounter + 1;
+            let html = sectionHeader("Sterilizzazione, Sanificazione e Sala Operativa");
+            html += commi(artNum, [
+                data.esiste_sala_sterilizzazione === 'si'
+                    ? `Lo Studio dispone di una sala di sterilizzazione dedicata, la cui responsabilità è affidata a: ${data.chi_gestisce_sterilizzazione}.`
+                    : `Lo Studio non dispone di una sala di sterilizzazione dedicata; la sterilizzazione è gestita da: ${data.chi_gestisce_sterilizzazione}.`,
+                `Il test dell'autoclave è effettuato come segue: ${data.test_autoclave}.`,
+                `La tracciabilità degli strumenti è garantita come segue: ${data.tracciabilita_strumenti}.`,
+                `La preparazione della sala operativa avviene come segue: ${data.preparazione_sala}.`,
+                `Il riordino post-trattamento avviene come segue: ${data.riordino_sala}.`,
+                `La sanificazione delle superfici avviene come segue: ${data.sanificazione_superfici}.`,
+                `I materiali taglienti sono gestiti come segue: ${data.gestione_taglienti}.`,
+                `I rifiuti sanitari sono gestiti come segue: ${data.gestione_rifiuti}.`,
+                `Il controllo delle scadenze dei materiali sterili avviene come segue: ${data.controllo_scadenze}.`,
+            ]);
+            return html;
+        }
+
+        function renderLaboratorio(data) {
+            if (!data.laboratorio_esterno) return '';
+            const artNum = articleCounter + 1;
+            let html = sectionHeader("Laboratorio Odontotecnico");
+            html += commi(artNum, [
+                `Il laboratorio odontotecnico di riferimento è: ${data.laboratorio_esterno}.`,
+                `L'invio delle prescrizioni è a cura di: ${data.chi_invia_prescrizioni}.`,
+                `Il controllo dell'arrivo dei lavori è a cura di: ${data.chi_controlla_arrivo}.`,
+                `Il tracciamento di impronte/scansioni inviate avviene come segue: ${data.tracciamento_impronte}.`,
+                `In caso di ritardi o errori del laboratorio, si procede come segue: ${data.gestione_ritardi_errori}.`,
+                `L'aggiornamento dell'agenda e l'informazione al paziente in caso di variazioni sono a cura di: ${data.chi_aggiorna_agenda_paziente}.`,
+            ]);
+            return html;
+        }
+
+        function renderMagazzino(data) {
+            if (!data.chi_controlla_materiali) return '';
+            const artNum = articleCounter + 1;
+            let html = sectionHeader("Magazzino Clinico e Approvvigionamenti");
+            html += commi(artNum, [
+                `Il controllo dei materiali è a cura di: ${data.chi_controlla_materiali} (soglia di riordino: ${data.soglia_riordino}).`,
+                `La segnalazione degli esaurimenti è a cura di: ${data.chi_comunica_esaurimenti}.`,
+                `L'autorizzazione agli ordini è riservata a: ${data.chi_autorizza_ordini}.`,
+                `Il controllo delle scadenze avviene come segue: ${data.controllo_scadenze_mag}.`,
+                textClause(data.gestione_materiali_chirurgici, "Gestione dei materiali chirurgici", (v) => `I materiali chirurgici sono gestiti come segue: ${v}.`),
+                data.presenti_farmaci === 'si' ? `I farmaci presenti in Studio sono gestiti come segue: ${data.gestione_farmaci}.` : null,
+                `I dispositivi medici sono gestiti come segue: ${data.gestione_dispositivi_medici}.`,
+            ]);
+            return html;
+        }
+
+        function renderSoftwareControlli(data) {
+            if (!data.gestionale_clinico) return '';
+            const artNum = articleCounter + 1;
+            let html = sectionHeader("Software, Strumenti Elettronici e Controlli");
+            let controlliBase;
+            if (data.accordo_sindacale_o_itl === 'Da regolarizzare') {
+                flagOpen('Base giuridica per i controlli a distanza (art. 4 L. 300/1970)', 'Indicata come "da regolarizzare": in assenza di accordo sindacale o autorizzazione dell\'Ispettorato Territoriale del Lavoro, gli strumenti di controllo installati non sono legittimamente utilizzabili.');
+                controlliBase = null;
+            } else {
+                controlliBase = `La base giuridica per gli eventuali strumenti di controllo a distanza, ai sensi dell'art. 4 della L. 300/1970, è la seguente: ${data.accordo_sindacale_o_itl}.`;
+            }
+            html += commi(artNum, [
+                `Lo Studio utilizza il gestionale clinico ${data.gestionale_clinico}, il software amministrativo ${data.software_amministrativo} e il software radiologico ${data.software_radiologico}${data.scanner_intraorale ? `, con scanner intraorale ${data.scanner_intraorale}` : ''}.`,
+                `L'assegnazione di email aziendali individuali è: ${data.email_aziendale === 'si' ? 'prevista' : 'non prevista'}.`,
+                `Il sistema di badge per gli accessi è: ${data.badge === 'si' ? 'attivo' : 'non attivo'}.`,
+                boolClause(data.log_accesso, 'Log di accesso ai sistemi informatici', "È attivo un sistema di log di accesso ai sistemi informatici."),
+                `La videosorveglianza è: ${data.videosorveglianza === 'si' ? 'presente' : 'assente'}.`,
+                controlliBase,
+                boolClause(data.informativa_privacy_consegnata, 'Informativa privacy consegnata al Personale', "Al Personale è stata consegnata l'informativa privacy relativa agli strumenti di controllo."),
+                boolClause(data.autorizzazioni_presenti, 'Autorizzazioni necessarie per gli strumenti di controllo', "Sono presenti le autorizzazioni necessarie per gli strumenti di controllo installati."),
+                "Eventuali controlli sugli strumenti elettronici, sui sistemi informatici o sugli accessi sono effettuati esclusivamente nel rispetto dell'art. 4 della L. 300/1970, della normativa privacy vigente e delle informative consegnate al Personale.",
+            ]);
+            return html;
+        }
+
+        function renderPrivacy(data) {
+            if (!data.dati_sanitari_trattati) return '';
+            const artNum = articleCounter + 1;
+            let html = sectionHeader("Privacy Sanitaria e Riservatezza");
+            html += commi(artNum, [
+                `Sono trattati i seguenti dati sanitari: ${data.dati_sanitari_trattati}.`,
+                `Sono autorizzati al trattamento: ${data.chi_autorizzato_trattamento}.`,
+                boolClause(data.dpo_nominato, 'Nomina del Responsabile della Protezione dei Dati (DPO)', `È nominato quale Responsabile della Protezione dei Dati (DPO): ${data.nome_dpo || 'nominativo da indicare'}.`, "Non risulta nominato un DPO: da valutare l'obbligatorietà della nomina in relazione al volume e alla natura dei dati sanitari trattati."),
+                textClause(data.regole_password, "Regole di gestione delle password", (v) => `La gestione delle password segue le seguenti regole: ${v}.`),
+                `I canali di comunicazione autorizzati con il paziente sono: ${data.canali_autorizzati}.`,
+                textClause(data.regole_condivisione, "Regole sulla condivisione dei dati tra il Personale", (v) => `La condivisione di dati e informazioni relative ai pazienti tra il Personale segue le seguenti regole: ${v}.`),
+                boolClause(data.previsto_nda, 'Accordo di riservatezza (NDA) con il Personale', "È previsto un accordo di riservatezza (NDA) sottoscritto dal Personale."),
+                textClause(data.rapporti_fornitori, "Regole nei rapporti con i fornitori esterni", (v) => `I rapporti con i fornitori esterni, ai fini della nomina a responsabile del trattamento, seguono le seguenti regole: ${v}.`),
+                textClause(data.regole_foto_dati, "Regole su archiviazione e cancellazione di foto e dati clinici", (v) => `Le fotografie e i dati clinici sono archiviati e cancellati secondo le seguenti regole: ${v}.`),
+                "Il Personale che tratta dati personali e sanitari opera secondo le istruzioni ricevute e nel rispetto del Regolamento UE 2016/679, del D.Lgs. 196/2003 e delle informative aziendali applicabili.",
+            ]);
+            return html;
+        }
+
+        function renderSocialMedia(data) {
+            if (!data.uso_logo) return '';
+            const artNum = articleCounter + 1;
+            let html = sectionHeader("Social Media e Immagini Cliniche");
+            html += commi(artNum, [
+                `L'utilizzo del logo dello Studio da parte del Personale è: ${data.uso_logo}.`,
+                `La pubblicazione di fotografie dello Studio sui profili social personali del Personale è: ${data.pubblicazione_foto_studio}.`,
+                `La pubblicazione di immagini dei pazienti è: ${data.pubblicazione_immagini_pazienti}.`,
+                `Le immagini "prima/dopo" sono: ${data.foto_prima_dopo}.`,
+                `I video clinici sono: ${data.video_clinici}.`,
+                `L'uso di WhatsApp per comunicazioni di lavoro è: ${data.uso_whatsapp}.`,
+                `Le chat interne dello Studio sono gestite come segue: ${data.chat_interne}.`,
+                `La gestione dei profili social ufficiali dello Studio è a cura di: ${data.chi_gestisce_social}.`,
+            ]);
+            return html;
+        }
+
+        function renderSicurezza(data) {
+            if (!data.dpi_previsti) return '';
+            const artNum = articleCounter + 1;
+            let html = sectionHeader("Salute e Sicurezza");
+            html += commi(artNum, [
+                textClause(data.dpi_previsti, "DPI previsti", (v) => `I dispositivi di protezione individuale previsti sono: ${v}.`),
+                textClause(data.rischio_biolologico, "Misure per il rischio biologico", (v) => `Le misure adottate per il rischio biologico sono: ${v}.`),
+                textClause(data.rischio_radiologico, "Misure per il rischio radiologico", (v) => `Le misure adottate per il rischio radiologico sono: ${v}.`),
+                `Il referente per il primo soccorso e le relative procedure: ${data.primo_soccorso}.`,
+                `Il referente antincendio e le relative procedure: ${data.antincendio}.`,
+                `L'esperto di radioprotezione e le relative misure: ${data.radioprotezione}.`,
+                data.sorveglianza_sanitaria === 'si'
+                    ? `È prevista sorveglianza sanitaria obbligatoria. Medico Competente: ${data.medico_competente || 'da indicare'}; periodicità delle visite: ${data.periodicita_visite || 'da indicare'}.`
+                    : "Non è prevista sorveglianza sanitaria obbligatoria, in base alla valutazione dei rischi effettuata.",
+                boolClause(data.rls_presente, 'Rappresentante dei Lavoratori per la Sicurezza (RLS)', `È eletto/designato quale Rappresentante dei Lavoratori per la Sicurezza (RLS): ${data.nome_rls || 'nominativo da indicare'}.`, "Non risulta eletto o designato un RLS."),
+                boolClause(data.formazione_rischio_alto, 'Formazione per attività a rischio elevato', "La formazione per le attività a rischio elevato è erogata al Personale interessato."),
+                textClause(data.procedure_emergenza, "Procedure di emergenza", (v) => `Le procedure di emergenza previste sono: ${v}.`),
+                `La segnalazione dei rischi avviene come segue: ${data.segnalazione_rischi}.`,
+                `Il referente sicurezza (RSPP) è: ${data.referente_sicurezza}.`,
+                "La mancata segnalazione di rischi, guasti o carenze può essere valutata come violazione degli obblighi di collaborazione in materia di sicurezza.",
+            ]);
+            return html;
+        }
+
+        function renderFormazione(data) {
+            if (!data.aggiornamento_aso) return '';
+            const artNum = articleCounter + 1;
+            let html = sectionHeader("Formazione e Aggiornamento");
+            html += commi(artNum, [
+                `L'aggiornamento del Personale ASO segue il seguente piano: ${data.aggiornamento_aso}.`,
+                `La gestione dell'Educazione Continua in Medicina (ECM) per il personale sanitario avviene come segue: ${data.ecm_sanitari}.`,
+                `La formazione periodica in materia di sicurezza è: ${data.formazione_sicurezza}; in materia di radioprotezione: ${data.formazione_radioprotezione}.`,
+                `La formazione sul software gestionale è: ${data.formazione_software}; sui protocolli interni: ${data.formazione_protocolli}.`,
+                `I costi della formazione obbligatoria sono a carico di: ${data.chi_sostiene_costi}. La formazione si svolge: ${data.quando_si_svolge}.`,
+                "La formazione obbligatoria prevista dalla legge o dal CCNL è gestita nel rispetto delle relative disposizioni applicabili.",
+            ]);
+            return html;
+        }
+
+        function renderErroreCriticita(data) {
+            if (!data.come_segnalare_errori) return '';
+            const artNum = articleCounter + 1;
+            let html = sectionHeader("Gestione dell'Errore e delle Criticità");
+            html += `<p>L'errore è trattato come elemento di prevenzione, tracciamento e miglioramento organizzativo, senza linguaggio punitivo automatico, salvo dolo o colpa grave.</p>`;
+            html += commi(artNum, [
+                `La segnalazione di errori avviene come segue: ${data.come_segnalare_errori}, a ${data.a_chi_segnalarli}, entro ${data.entro_quando}.`,
+                boolClause(data.esiste_registro_criticità, 'Registro delle criticità', "È attivo un registro delle criticità."),
+                textClause(data.gestione_reclami, "Gestione dei reclami dei pazienti", (v) => `I reclami dei pazienti sono gestiti come segue: ${v}.`),
+                `La gestione dei ritardi clinici avviene come segue: ${data.gestione_ritardi_clinici}.`,
+                `La gestione dei guasti alle apparecchiature avviene come segue: ${data.gestione_guasti}.`,
+                data.cosa_non_tollerato ? `Non sono tollerati: ${data.cosa_non_tollerato.replace(/,/g, ', ')}.` : null,
+            ]);
+            return html;
+        }
+
+        function renderConflittoInteressi(data) {
+            if (!data.collaborazioni_esterne) return '';
+            const artNum = articleCounter + 1;
+            let html = sectionHeader("Conflitto di Interessi e Concorrenza");
+            html += commi(artNum, [
+                `Le collaborazioni esterne del Personale sono disciplinate come segue: ${data.collaborazioni_esterne}.`,
+                `Le collaborazioni con studi concorrenti sono disciplinate come segue: ${data.collaborazioni_concorrenti}.`,
+                data.comunicazione_conflitti === 'si'
+                    ? "La comunicazione tempestiva di eventuali conflitti di interesse è obbligatoria."
+                    : "Non è espressamente prevista una procedura di comunicazione dei conflitti di interesse, fermi restando gli obblighi generali di correttezza e buona fede.",
+                data.uso_relazioni_studio === 'si'
+                    ? "È vietato l'utilizzo delle relazioni instaurate tramite lo Studio per fini personali."
+                    : null,
+                textClause(data.uso_know_how, "Tutela del know-how aziendale", (v) => `La tutela del know-how aziendale è disciplinata come segue: ${v}.`),
+                data.riservatezza_cessazione === 'si'
+                    ? "L'obbligo di riservatezza sulle informazioni relative allo Studio permane anche dopo la cessazione del rapporto di lavoro."
+                    : null,
+                "Durante il rapporto di lavoro resta fermo l'obbligo di fedeltà previsto dall'art. 2105 c.c., nei limiti e secondo quanto previsto dalla normativa vigente.",
+            ]);
+            return html;
+        }
+
+        function renderDisciplinare(data) {
+            if (!data.richiamo_ccnl) return '';
+            const artNum = articleCounter + 1;
+            let html = sectionHeader("Disposizioni Disciplinari");
+            let pubblicazioneText = `Il presente Regolamento è pubblicato e consegnato al Personale con le seguenti modalità: ${data.modalita_pubblicazione}.`;
+            if (data.modalita_pubblicazione && !data.modalita_pubblicazione.includes('Affissione fisica')) {
+                flagOpen('Modalità di pubblicazione del Regolamento', `Modalità indicata: "${data.modalita_pubblicazione}". In assenza di affissione fisica in luogo accessibile a tutti i lavoratori, la validità disciplinare del Regolamento ai sensi dell'art. 7 della L. 300/1970 richiede verifica specifica con il consulente del lavoro.`);
+            }
+            html += commi(artNum, [
+                data.richiamo_ccnl === 'si' ? "Le sanzioni disciplinari fanno esplicito richiamo al codice disciplinare del CCNL applicato." : null,
+                pubblicazioneText,
+                data.firma_presa_visione === 'si' ? "È richiesta la firma del Personale per presa visione del presente Regolamento." : null,
+                `A titolo esemplificativo, non sono conformi al presente Regolamento i seguenti comportamenti: ${data.esempi_non_conformi}.`,
+                `Le eventuali violazioni sono contestate per iscritto; il dipendente ha diritto di presentare le proprie giustificazioni nei termini previsti dall'art. 7 della L. 300/1970 (${data.procedura_contestazione}).`,
+                "Le eventuali violazioni del presente Regolamento sono valutate disciplinarmente nel rispetto dell'art. 7 della L. 300/1970, dell'art. 2106 c.c., del principio di proporzionalità e del codice disciplinare del CCNL applicato. Il presente Regolamento non introduce sanzioni specifiche automatiche.",
+            ]);
+            return html;
+        }
+
+        function renderRinvioFonti(data) {
+            if (!data.richiamo_ccnl) return '';
+            const artNum = articleCounter + 1;
+            let html = sectionHeader("Rinvio a Fonti Normative e Clausola di Prevalenza");
+            html += commi(artNum, [
+                `Per quanto non espressamente previsto dal presente Regolamento si rinvia alla legge, al CCNL applicato (${data.ccnl || 'CCNL applicabile'}) e ai contratti individuali di lavoro.`,
+                "In caso di contrasto tra le disposizioni del presente Regolamento e quelle di legge, del CCNL o dei contratti individuali, prevalgono queste ultime, ove più favorevoli al lavoratore o comunque inderogabili.",
+            ]);
+            return html;
+        }
+
+        function renderRevisione(data) {
+            if (!data.modalita_revisione) return '';
+            const artNum = articleCounter + 1;
+            let html = sectionHeader("Modifiche e Revisione del Regolamento");
+            html += commi(artNum, [
+                `Il presente Regolamento può essere modificato dal Titolare secondo le seguenti modalità e tempistiche: ${data.modalita_revisione}.`,
+                "Le modifiche sono comunicate al Personale con le medesime modalità previste per l'adozione del Regolamento e sostituiscono le disposizioni precedenti a decorrere dalla data di comunicazione.",
+            ]);
+            return html;
+        }
+
+        function renderAllegati(data) {
+            const items = [];
+            if (data.regole_apertura || data.regole_chiusura) items.push("Checklist di apertura e chiusura dello Studio");
+            if (data.esiste_sala_sterilizzazione) items.push("Protocolli clinici e operativi (sterilizzazione, sanificazione, gestione dei rifiuti sanitari)");
+            if (data.dpi_previsti) items.push("Documento di Valutazione dei Rischi (DVR) e registro DPI");
+            if (data.richiamo_ccnl === 'si') items.push(`Codice disciplinare del CCNL applicato${data.ccnl ? ` (${data.ccnl})` : ''}`);
+            if (!items.length) return '';
+            const artNum = articleCounter + 1;
+            let html = sectionHeader("Allegati");
+            html += `<p>Costituiscono parte integrante del presente Regolamento i seguenti allegati, disponibili in Studio per la consultazione da parte del Personale:</p>`;
+            html += bulletList(items);
+            return html;
+        }
+
+        function renderEntrataVigore(data) {
+            if (!data.luogo) return '';
+            const artNum = articleCounter + 1;
+            let html = sectionHeader("Entrata in Vigore e Firme");
+            html += commi(artNum, [
+                "Il presente Regolamento entra in vigore alla data indicata all'Articolo 1.",
+            ]);
+            html += `<p style="margin-top: 1.5rem;">Luogo: <strong>${data.luogo}</strong>, Data: <strong>${data.data_firma}</strong></p>`;
+            html += `<div style="margin-top: 2rem;">
+                <strong>Il Titolare / Legale Rappresentante</strong><br>
+                ${data.nome_titolare_firma || data.nome_titolare}
+                <div style="border-top: 1px solid #000; width: 45%; margin-top: 2.5rem;"></div>
+            </div>`;
+            html += `<h3 style="margin-top:2rem;">Per presa visione e accettazione</h3>`;
+            html += `<p>Ciascun dipendente sottoscrive per presa visione e integrale accettazione del presente Regolamento.</p>`;
+            const sigHeaders = ["Nome e Cognome", "Qualifica", "Data", "Firma"];
+            const sigPad = "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+            html += `<table style="width:100%; border-collapse:collapse; margin-top:0.8rem;">
+                <tr>
+                    ${sigHeaders.map((h) => `<td style="border:1px solid #E4E7EC; background:#0D2839; color:#fff; padding:6pt 10pt; font-weight:bold;">${h}${sigPad}</td>`).join('')}
+                </tr>
+                ${Array(6).fill(`<tr>${sigHeaders.map(() => `<td style="border:1px solid #E4E7EC; padding:14pt 10pt;">&nbsp;</td>`).join('')}</tr>`).join('')}
+            </table>`;
+            return html;
+        }
+
+        function renderAllegatoA(data) {
+            if (!puntiAperti.length) return '';
+            let html = `<div style="page-break-before: always;"></div>`;
+            html += `<h2>Allegato A: Punti Aperti per la Verifica del Consulente del Lavoro</h2>`;
+            html += `<p>Il presente allegato raccoglie i punti del Regolamento che richiedono una verifica o una decisione prima della pubblicazione definitiva, così da agevolare la revisione da parte del Consulente del Lavoro. Tali aspetti non sono stati trasposti come regole nel corpo del Regolamento, in quanto non risultano ad oggi formalizzati o richiedono un approfondimento specifico.</p>`;
+            html += bulletList(puntiAperti.map((p) => `<strong>${p.label}:</strong> ${p.detail}`));
+            return html;
+        }
+
+        // --- 5. EXPORT UTILITIES ---
+        function scaricaWord() {
+            const bodyHtml = generateDocument(currentState);
+            const fullHtml = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta charset="utf-8">
+<!--[if gte mso 9]>
+<xml><w:WordDocument><w:View>Print</w:View><w:Zoom>100</w:Zoom></w:WordDocument></xml>
+<![endif]-->
+<style>
+@page Section1 { size: 595.3pt 841.9pt; margin: 70pt 70pt 70pt 70pt; }
+div.Section1 { page: Section1; }
+body { font-family: Calibri, Arial, sans-serif; font-size: 11pt; color: #344054; line-height: 1.35; }
+h1 { mso-style-name:"Title"; font-family: Calibri, Arial, sans-serif; font-size: 20pt; font-weight: bold; color: #0D2839; text-align: center; margin: 0 0 18pt 0; }
+h2 { mso-style-name:"Heading 1"; font-family: Calibri, Arial, sans-serif; font-size: 13pt; font-weight: bold; color: #0D2839; text-transform: uppercase; border-bottom: 1pt solid #CFAA5C; padding-bottom: 4pt; margin: 22pt 0 10pt 0; }
+h3 { mso-style-name:"Heading 2"; font-family: Calibri, Arial, sans-serif; font-size: 11.5pt; font-weight: bold; color: #0D2839; margin: 14pt 0 6pt 0; }
+p { mso-style-name:"Normal"; margin: 0 0 8pt 0; line-height: 1.35; text-align: justify; }
+ul { margin: 0 0 10pt 0; padding-left: 18pt; }
+li { margin-bottom: 4pt; }
+table { border-collapse: collapse; width: 100%; margin: 8pt 0 12pt 0; }
+td { border: 1pt solid #E4E7EC; padding: 6pt 10pt; vertical-align: top; font-size: 10.5pt; }
+.disclaimer { background: #FDF6E3; padding: 10pt; font-style: italic; margin-bottom: 16pt; border-left: 4pt solid #CFAA5C; color: #344054; }
+strong { font-weight: bold; color: #0D2839; }
+</style>
+</head>
+<body>
+<div class="Section1">${bodyHtml}</div>
+</body>
+</html>`;
+            const blob = new Blob(['\ufeff', fullHtml], { type: 'application/msword' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            const nomeFile = (currentState.nome_studio || 'studio').replace(/[^a-z0-9]/gi, '_');
+            a.href = url;
+            a.download = `Regolamento_Aziendale_${nomeFile}.doc`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function copyToClipboard() {
+            const contentEl = document.getElementById('preview-content');
+            const htmlContent = contentEl.innerHTML;
+            const textContent = contentEl.innerText;
+
+            if (navigator.clipboard && window.ClipboardItem) {
+                try {
+                    const item = new ClipboardItem({
+                        'text/html': new Blob([htmlContent], { type: 'text/html' }),
+                        'text/plain': new Blob([textContent], { type: 'text/plain' })
+                    });
+                    navigator.clipboard.write([item]).then(() => {
+                        alert("Documento copiato negli appunti (con formattazione). Incollalo in Word.");
+                    }).catch(() => {
+                        fallbackCopy(textContent);
+                    });
+                } catch (e) {
+                    fallbackCopy(textContent);
+                }
+            } else {
+                fallbackCopy(textContent);
+            }
+        }
+
+        function fallbackCopy(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert("Documento copiato negli appunti come testo semplice.");
+            }).catch(() => {
+                alert("Errore durante la copia. Usa il pulsante 'Scarica in Word' per ottenere il file formattato.");
+            });
+        }
+
+        // Initialize
+        loadState();
+        checkForDraft();
+    </script>
+</body>
+</html>
